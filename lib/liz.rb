@@ -1,6 +1,4 @@
 # liz
-# ["Bang", "BangEqual", "Equal", "EqualEqual", "Greater", "GreaterEqual", "Less", "LessEqual"]
-
 # ["And",
 #  "Class",
 #  "Else",
@@ -17,13 +15,13 @@
 #  "True",
 #  "Var",
 #  "While"]
-
-# enum TokenType {
-#   // Single-character tokens.
-#   // One or two character tokens.
-
-#   // Literals.
-#   IDENTIFIER STRING NUMBER
-#   // Keywords.
-#   EOF
-# }
+# Int
+# Float
+# Bool
+# String
+# Char
+# Unit
+# Tuple
+# List
+# Array
+# Function

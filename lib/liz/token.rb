@@ -1,42 +1,43 @@
-module Onda
+module Liz
   class Token
-
-    # ["LeftParen",
-    # "RightParen",
-    # "LeftBrace",
-    # "RightBrace",
-    # "Comma",
-    # "Dot",
-    # "Minus",
-    # "Plus",
-    # "Semicolon",
-    # "Slash",
-    # "Star"]
-
-    attr_reader :type
-    attr_reader :lexeme
-    attr_reader :literal
-    attr_reader :line
-
-#   final TokenType ;
-#   final String ;
-#   final Object ;
-#   final int ; // [location]
-
-    def initialize()
-#   Token(TokenType type, String lexeme, Object literal, int line) {
-#     this.type = type;
-#     this.lexeme = lexeme;
-#     this.literal = literal;
-#     this.line = line;
+    class << self
+      def token_type(*types)
+        types.each do |type|
+          const_set type, type.to_s
+        end
+      end
     end
 
+    attr_reader :type,
+                :lexeme,
+                :literal,
+                :line
+
+    token_type :Plus, :Minus, :Star, :Slash,
+               :Semicolon, :Comma, :Dot,
+               :LeftParen, :RightParen,
+               :LeftBrace, :RightBrace
+
+    token_type :Bang, :BangEqual,
+               :Equal, :EqualEqual,
+               :Greater, :GreaterEqual,
+               :Less, :LessEqual
+
+    token_type :Int, :Float, :Bool,
+               :String, :Char,
+               :Identifier,
+               :EOF
+
+    def initialize(type:, lexeme:, literal: nil, line:)
+      @type = type
+      @lexeme = lexeme
+      @literal = literal
+      @line = line
+    end
+
+    def to_s
+      return @type if @literal.nil?
+      "#{@type} {#{@lexeme}} #{@literal}"
+    end
   end
 end
-
-# token
-
-#   public String toString() {
-#     return type + " " + lexeme + " " + literal;
-#   }
-# }
