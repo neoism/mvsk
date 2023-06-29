@@ -1,8 +1,8 @@
-require File.expand_path('../lib/onda/version', __FILE__)
+require File.expand_path('../lib/liz/version', __FILE__)
 
 Gem::Specification.new do |s|
-  s.name       = 'onda'
-  s.version    = Onda::VERSION
+  s.name       = 'lizism'
+  s.version    = Liz::VERSION
   s.summary    = 'A simple programming language'
   s.authors    = 'razeos at tossdev'
   s.files      = Dir['lib/**/*']

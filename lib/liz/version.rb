@@ -1,3 +1,3 @@
-module Onda
+module Liz
   VERSION = '1.0.1'
 end
