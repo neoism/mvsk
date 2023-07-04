@@ -8,27 +8,32 @@ module Liz
       end
     end
 
-    attr_reader :type,
-                :lexeme,
-                :literal,
-                :line
+    attr_reader :type, :lexeme, :literal, :line
 
-    token_type :Plus, :Minus, :Star, :Slash,
-               :Semicolon, :Comma, :Dot,
-               :LeftParen, :RightParen,
-               :LeftBrace, :RightBrace
+    token_type :Plus, :Minus, :Star, :Slash, :Modulo,
+               :Comma, :Colon, :Semi, :Dot,
+               :LeftBrace, :RightBrace,
+               :LeftSquare, :RightSquare,
+               :LeftParen, :RightParen
 
-    token_type :Bang, :BangEqual,
-               :Equal, :EqualEqual,
-               :Greater, :GreaterEqual,
-               :Less, :LessEqual
+    token_type :Bang, :BangEq, :Equal, :EqualEq,
+               :Greater, :GreaterEq, :Less, :LessEq,
+               :BitwiseAnd, :BitwiseOr, :And, :Or,
+               :Question, :QuestionDot,
+               :Pipeline
 
-    token_type :Int, :Float, :Bool,
-               :String, :Char,
-               :Identifier,
-               :EOF
+    token_type :Int, :Float, :String, :Char, :Bool, :Nil,
+               :Identifier, :Illegal, :EOF
 
-    def initialize(type:, lexeme:, literal: nil, line:)
+    token_type :If, :Else, :Switch, :Case, :Default,
+               :For, :In, :Loop, :Break, :Continue,
+               :Class, :Extends, :Super, :Self,
+               :Get, :Set, :Fun, :Return,
+               :Let, :Mut, :Is, :Not,
+               :Import, :As,
+               :Throw, :Try
+
+    def initialize(type, lexeme, literal = nil, line)
       @type = type
       @lexeme = lexeme
       @literal = literal
@@ -37,7 +42,7 @@ module Liz
 
     def to_s
       return @type if @literal.nil?
-      "#{@type} {#{@lexeme}} #{@literal}"
+      "#{@type} #{@lexeme} #{@literal}"
     end
   end
 end
