@@ -1,8 +1,11 @@
+require 'liz/lexer/keywords'
 require 'liz/lexer/helper'
 
 module Liz
   class Lexer
     include Helper
+    include Keywords
+
     attr_reader :tokens
 
     def initialize(code)
@@ -41,9 +44,8 @@ module Liz
       double_token(char) ||
       triple_token(char) ||
       string_token(char) ||
-      number_token(char)
-
-      #          l.identifierToken(c)
+      number_token(char) ||
+      identifier_token(char)
     end
 
     def skip_whitespace(char)
@@ -69,6 +71,32 @@ module Liz
       end
     end
 
+    def identifier_token(char)
+      if is_alpha(char)
+        while is_alpha_numeric(peek)
+          advance
+        end
+
+        lexeme = @input[@start...@current]
+
+        if is_bool(lexeme)
+          add_token_bool(lexeme)
+        elsif is_nil(lexeme)
+          add_token(Token::Nil, 'nil')
+        else
+          if type = RESERVED_WORDS[lexeme.to_sym]
+            add_token(type, lexeme)
+          else
+          end
+        end
+
+        true
+      else
+        add_token(Token::Illegal, nil, "unexpected '#{char}'")
+        false
+      end
+    end
+
     def string_token(char)
       if char == '"'
         until peek == '"' || at_end?
@@ -85,9 +113,7 @@ module Liz
         end
 
         advance
-
-        lexeme = @input[@start...@current]
-        add_token(Token::String, lexeme, lexeme[1, lexeme.length - 2])
+        add_token_string(@input[@start...@current])
 
         true
       else
@@ -213,6 +239,16 @@ module Liz
       end
 
       true
+    end
+
+    def add_token_bool(lexeme)
+      value = lexeme.eql?('true')
+      add_token(Token::Bool, lexeme, value)
+    end
+
+    def add_token_string(lexeme)
+      value = lexeme[1, lexeme.length - 2]
+      add_token(Token::String, lexeme, value)
     end
 
     def add_token_float(lexeme)
