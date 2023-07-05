@@ -16,6 +16,16 @@ module Liz
       @current = 0
     end
 
+    def scan_tokens
+      until at_end?
+        @start = @current
+        scan_token
+      end
+
+      add_token(Token::EOF)
+      @tokens
+    end
+
     def next_token
       until at_end?
         @start = @current
@@ -87,6 +97,7 @@ module Liz
           if type = RESERVED_WORDS[lexeme.to_sym]
             add_token(type, lexeme)
           else
+            add_token(Token::Identifier, lexeme)
           end
         end
 
