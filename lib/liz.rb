@@ -1,3 +1,7 @@
+require 'liz/version'
+require 'liz/token'
+require 'liz/lexer'
+
 # liz
 # ["And",
 #  "Class",

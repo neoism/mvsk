@@ -1,3 +1,5 @@
+require 'liz/lexer/helper'
+
 module Liz
   class Lexer
     include Helper
@@ -17,7 +19,14 @@ module Liz
         break if scan_token
       end
 
-      @tokens.last
+      @token_i = 0 if @token_i.nil?
+      @token_i += 1
+
+      if @token_i <= @tokens.size
+        @tokens.last
+      else
+        nil
+      end
     end
 
     private
@@ -26,19 +35,14 @@ module Liz
       char = advance
 
       return false if skip_whitespace(char)
-
-      #   if l.skipComment(c) {
-      #     return false
-      #   }
+      return false if skip_comment(char)
 
       single_token(char) ||
+      double_token(char) ||
+      triple_token(char) ||
+      string_token(char) ||
       number_token(char)
 
-      #   return l.(c) ||
-      #          l.doubleToken(c) ||
-      #          l.tripleToken(c) ||
-      #          l.stringToken(c) ||
-      #          l.numberToken(c) ||
       #          l.identifierToken(c)
     end
 
@@ -54,20 +58,41 @@ module Liz
     end
 
     def skip_comment(char)
+      if char == '/' && match?('/')
+        until peek == "\n" || at_end?
+          advance
+        end
 
-      # func (l *Lexer) (c rune) bool {
-      #   if c == '/' && l.match('/') {
-      #     for {
-      #       if l.peek() == '\n' || l.isEnd() {
-      #         break
-      #       }
-      #       l.advance()
-      #     }
-      #     return true
-      #   }
-      #   return false
-      # }
+        true
+      else
+        false
+      end
+    end
 
+    def string_token(char)
+      if char == '"'
+        until peek == '"' || at_end?
+          if peek == "\n"
+            @line += 1
+          end
+
+          advance
+        end
+
+        if at_end?
+          add_token(Token::Illegal, nil, 'unterminated string')
+          return false
+        end
+
+        advance
+
+        lexeme = @input[@start...@current]
+        add_token(Token::String, lexeme, lexeme[1, lexeme.length - 2])
+
+        true
+      else
+        false
+      end
     end
 
     def number_token(char)
@@ -82,14 +107,10 @@ module Liz
           while is_digit(peek)
             advance
           end
-        end
 
-        lexeme = @input[@start...@current]
-
-        if lexeme.include?('.')
-          add_token(Token::Float, lexeme, lexeme.to_f)
+          add_token_float(@input[@start...@current])
         else
-          add_token(Token::Int, lexeme, lexeme.to_i)
+          add_token_int(@input[@start...@current])
         end
 
         true
@@ -120,6 +141,86 @@ module Liz
       end
 
       true
+    end
+
+    def double_token(char)
+      case char
+      when '!'
+        if match?('=')
+          add_token(Token::BangEq)
+        else
+          add_token(Token::Bang)
+        end
+      when '='
+        if match?('=')
+          add_token(Token::EqualEq)
+        else
+          add_token(Token::Equal)
+        end
+      when '>'
+        if match?('=')
+          add_token(Token::GreaterEq)
+        else
+          add_token(Token::Greater)
+        end
+      when '<'
+        if match?('=')
+          add_token(Token::LessEq)
+        else
+          add_token(Token::Less)
+        end
+      when '?'
+        if match?('.')
+          add_token(Token::QuestionDot)
+        else
+          add_token(Token::Question)
+        end
+      else
+        return false
+      end
+
+      true
+    end
+
+    def triple_token(char)
+      case char
+      when '&'
+        if match?('&')
+          if match?('=')
+            add_token(Token::Illegal)
+          else
+            add_token(Token::And)
+          end
+        else
+          add_token(Token::BitwiseAnd)
+        end
+      when '|'
+        if match?('|')
+          if match?('=')
+            add_token(Token::Illegal)
+          else
+            add_token(Token::Or)
+          end
+        else
+          if match?('>')
+            add_token(Token::Pipeline)
+          else
+            add_token(Token::BitwiseOr)
+          end
+        end
+      else
+        return false
+      end
+
+      true
+    end
+
+    def add_token_float(lexeme)
+      add_token(Token::Float, lexeme, lexeme.to_f)
+    end
+
+    def add_token_int(lexeme)
+      add_token(Token::Int, lexeme, lexeme.to_i)
     end
 
     def add_token(type, lexeme = nil, literal = nil)
