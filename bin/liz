@@ -1,1 +1,11 @@
 #!/usr/bin/env ruby
+require 'liz'
+
+if ARGV.empty?
+elsif ARGV[1].nil?
+  if File.exist?(ARGV.first)
+    l = Liz::Lexer.new(File.read(ARGV.first))
+    puts l.scan_tokens
+  end
+else
+end

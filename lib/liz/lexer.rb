@@ -22,7 +22,7 @@ module Liz
         scan_token
       end
 
-      add_token(Token::EOF)
+      add_token(Token::EOF, '')
       @tokens
     end
 
