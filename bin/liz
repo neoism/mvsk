@@ -1,11 +1,41 @@
 #!/usr/bin/env ruby
+require 'readline'
+require 'optparse'
 require 'liz'
 
-if ARGV.empty?
-elsif ARGV[1].nil?
-  if File.exist?(ARGV.first)
-    l = Liz::Lexer.new(File.read(ARGV.first))
-    puts l.scan_tokens
-  end
+args = ARGV.reject { |s| s.start_with?('-') }
+opts = ARGV - args
+
+if args.length.eql?(1) and opts.empty?
+  Liz.run_file(args.first)
+elsif ARGV.length.zero?
+  Liz.run_prompt
 else
+  OptionParser.new do |options|
+    options.version = Liz::VERSION
+    options.banner = <<~USAGE
+      #{options.program_name} #{options.version}
+
+      Usage:
+
+        liz <file> [options]
+
+      Options:
+    USAGE
+
+    options.on '--tokens', 'print tokens' do |tokens|
+      puts 'tokens'
+    end
+
+    options.on '--nodes', 'print nodes' do |nodes|
+      puts 'nodes'
+    end
+
+    options.summary_width = 22
+
+    if args.length > 1
+      puts options
+      exit(64)
+    end
+  end.parse!
 end
