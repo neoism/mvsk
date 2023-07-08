@@ -6,7 +6,7 @@ opts = ARGV - args
 
 if args.length.eql?(1) and opts.empty?
   Liz.run_file(args.first)
-elsif args.length.zero?
+elsif ARGV.length.zero?
   Liz.run_prompt
 else
   require 'optparse'

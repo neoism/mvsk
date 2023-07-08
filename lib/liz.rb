@@ -8,11 +8,10 @@ module Liz
   def run_prompt
     require 'readline'
 
-    # InputStreamReader input = new InputStreamReader(System.in);
-    # BufferedReader reader = new BufferedReader(input);
-
     while buf = Readline.readline('> ', true)
       break if buf.strip.eql?('exit')
+      print '> ', buf, "\n"
+
       # run(line); //> reset-had-error
       # hadError = false;
     end
