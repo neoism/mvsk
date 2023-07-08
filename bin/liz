@@ -4,17 +4,18 @@ require 'liz'
 args = ARGV.reject { |s| s.start_with?('-') }
 opts = ARGV - args
 
-if args.length.eql?(1) and opts.empty?
+if args.length == 1 and opts.empty?
   Liz.run_file(args.first)
 elsif ARGV.length.zero?
   Liz.run_prompt
 else
+  require 'pastel'
   require 'optparse'
 
   OptionParser.new do |op|
     op.version = Liz::VERSION
     op.banner = <<~USAGE
-      #{op.program_name} #{op.version}
+      #{0}
 
       Usage:
 
@@ -35,7 +36,7 @@ else
 
     if args.length > 1
       puts op
-      exit(64)
+      exit
     end
   end.parse!
 end

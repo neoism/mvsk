@@ -6,14 +6,25 @@ module Liz
   module_function
 
   def run_prompt
+    require 'pastel'
     require 'readline'
 
-    while buf = Readline.readline('> ', true)
-      break if buf.strip.eql?('exit')
-      print '> ', buf, "\n"
+    stty_save = `stty -g`.chomp
 
-      # run(line); //> reset-had-error
-      # hadError = false;
+    begin
+      while buf = Readline.readline('> ', true)
+        break if buf.nil?
+        break if buf.strip == 'exit'
+
+        print run(buf), "\n"
+        # run(line); //> reset-had-error
+        # hadError = false;
+      end
+    rescue Interrupt
+      system 'stty', stty_save
+    ensure
+      puts
+      exit
     end
   end
 
