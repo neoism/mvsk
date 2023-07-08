@@ -6,6 +6,8 @@ module Liz
   module_function
 
   def run_prompt
+    require 'readline'
+
     # InputStreamReader input = new InputStreamReader(System.in);
     # BufferedReader reader = new BufferedReader(input);
 
