@@ -1,4 +1,4 @@
-module Liz
+module Musk
   module Nodes
     class Node
       def accept(visitor)

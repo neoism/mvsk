@@ -1,8 +1,12 @@
-require 'liz/version'
-require 'liz/token'
-require 'liz/lexer'
+require 'musk/version'
+require 'musk/token'
+require 'musk/lexer'
+require 'musk/nodes'
+require 'musk/parser'
 
-module Liz
+module Musk
+  class ParseError < RuntimeError; end
+
   module_function
 
   def run_prompt

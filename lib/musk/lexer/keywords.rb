@@ -1,4 +1,4 @@
-module Liz
+module Musk
   class Lexer
     module Keywords
       RESERVED_WORDS = {

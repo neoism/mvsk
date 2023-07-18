@@ -1,25 +1,25 @@
 #!/usr/bin/env ruby
-require 'liz'
+require 'musk'
 
 args = ARGV.reject { |s| s.start_with?('-') }
 opts = ARGV - args
 
 if args.length == 1 and opts.empty?
-  Liz.run_file(args.first)
+  Musk.run_file(args.first)
 elsif ARGV.length.zero?
-  Liz.run_prompt
+  Musk.run_prompt
 else
   require 'pastel'
   require 'optparse'
 
   OptionParser.new do |op|
-    op.version = Liz::VERSION
+    op.version = Musk::VERSION
     op.banner = <<~USAGE
       #{0}
 
       Usage:
 
-        liz <file> [options]
+        mvsk <file> [options]
 
       Options:
     USAGE

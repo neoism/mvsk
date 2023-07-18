@@ -1,7 +1,7 @@
-require 'liz/lexer/keywords'
-require 'liz/lexer/helper'
+require 'musk/lexer/keywords'
+require 'musk/lexer/helper'
 
-module Liz
+module Musk
   class Lexer
     include Helper
     include Keywords

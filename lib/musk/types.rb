@@ -1,4 +1,4 @@
-module Liz
+module Musk
   module Types
     class List
     end

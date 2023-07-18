@@ -1,4 +1,4 @@
-module Liz
+module Musk
   class Token
     class << self
       def token_type(*types)

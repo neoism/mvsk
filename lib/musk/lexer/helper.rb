@@ -1,4 +1,4 @@
-module Liz
+module Musk
   class Lexer
     module Helper
       def is_alpha_numeric(char)

@@ -1,3 +1,3 @@
-module Liz
+module Musk
   VERSION = '1.0.2'
 end
