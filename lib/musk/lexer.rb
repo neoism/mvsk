@@ -34,13 +34,13 @@ module Musk
       end
 
       @token_i = 0 if @token_i.nil?
-      @token_i += 1
+      token = @tokens[@token_i]
 
-      if @token_i <= @tokens.size
-        @tokens.last
-      else
-        nil
+      if @token_i < @tokens.size
+        @token_i += 1
       end
+
+      token
     end
 
     private
