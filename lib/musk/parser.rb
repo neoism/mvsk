@@ -1,5 +1,10 @@
+require 'musk/parser/parse_error'
+require 'musk/parser/helper'
+
 module Musk
   class Parser
+    include Helper
+
     def initialize(tokens)
       @tokens = tokens
       @current = 0
@@ -32,16 +37,15 @@ module Musk
       return loop_statement if match?(Token::Loop)
       return return_statement if match?(Token::Return)
 
-#     if (match(LEFT_BRACE)) return new Stmt.Block(block());
-#     return expressionStatement();
+      #     if (match(LEFT_BRACE)) return new Stmt.Block(block());
+      #     return expressionStatement();
     end
 
     #   private Stmt expressionStatement() {
-#     Expr expr = expression();
-#     consume(SEMICOLON, "Expect ';' after expression.");
-#     return new Stmt.Expression(expr);
-#   }
-
+    #     Expr expr = expression();
+    #     consume(SEMICOLON, "Expect ';' after expression.");
+    #     return new Stmt.Expression(expr);
+    #   }
 
     def synchronize
       advance
@@ -61,23 +65,21 @@ module Musk
       end
     end
 
-
     def expression
       assignment
     end
 
     def assignment
-
     end
 
-#   private Expr unary() {
-#     if (match(BANG, MINUS)) {
-#       Token operator = previous();
-#       Expr right = unary();
-#       return new Expr.Unary(operator, right);
-#     }
-#     return call();
-#   }
+    #   private Expr unary() {
+    #     if (match(BANG, MINUS)) {
+    #       Token operator = previous();
+    #       Expr right = unary();
+    #       return new Expr.Unary(operator, right);
+    #     }
+    #     return call();
+    #   }
 
     def primary
       return literal(previous) if match?(Token::Nil, Token::Bool)
@@ -128,9 +130,9 @@ module Musk
 
     def error(tok, message)
       if tok.type == Token::EOF
-#       report(token.line, " at end", message);
+        #       report(token.line, " at end", message);
       else
-#       report(token.line, " at '" + token.lexeme + "'", message);
+        #       report(token.line, " at '" + token.lexeme + "'", message);
       end
     end
 
@@ -164,7 +166,21 @@ module Musk
     end
 
     def at_end?
-      peek.type == Token::EOF
+      is_eof(peek.type)
     end
   end
 end
+
+# #   private Stmt returnStatement() {
+# #     Token keyword = previous();
+# #     Expr value = null;
+# #     if (!check(SEMICOLON)) {
+# #       value = expression();
+# #     }
+# #     consume(SEMICOLON, "Expect ';' after return value.");
+# #     return new Stmt.Return(keyword, value);
+# #   }
+# Return: [
+#   o 'RETURN Expression',                      -> new Return $2
+#   o 'RETURN',                                 -> new Return
+# ]

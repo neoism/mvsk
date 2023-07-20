@@ -5,8 +5,6 @@ require 'musk/nodes'
 require 'musk/parser'
 
 module Musk
-  class ParseError < RuntimeError; end
-
   module_function
 
   def run_prompt
