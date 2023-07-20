@@ -9,6 +9,7 @@ module Musk
     attr_reader :tokens
 
     def initialize(code)
+      @errors = []
       @tokens = []
       @input = code
       @line = 1
@@ -103,7 +104,8 @@ module Musk
 
         true
       else
-        add_token(Token::Illegal, nil, "unexpected '#{char}'")
+        @errors.push("unexpected '#{char}'")
+        add_token(Token::Illegal)
         false
       end
     end
@@ -119,7 +121,8 @@ module Musk
         end
 
         if at_end?
-          add_token(Token::Illegal, nil, 'unterminated string')
+          @errors.push('unterminated string')
+          add_token(Token::Illegal)
           return false
         end
 
@@ -303,7 +306,7 @@ module Musk
     end
 
     def at_end?
-      @current >= @input.length
+      @input[@current].nil?
     end
   end
 end
